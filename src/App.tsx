@@ -131,68 +131,87 @@ function App() {
         </a>
       </header>
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12 pt-32">
-        <div className="max-w-md w-full mx-auto bg-glass border border-glass-border rounded-2xl shadow-glass p-8 flex flex-col items-center backdrop-blur-md">
-          <div className="flex flex-col items-center mb-6">
+        {success ? (
+          <div className="max-w-md w-full mx-auto bg-glass border border-glass-border rounded-2xl shadow-glass p-8 flex flex-col items-center backdrop-blur-md animate-fade-in">
             <span className="bg-primary/30 p-4 rounded-full mb-4 shadow-glow">
               <Shield className="w-8 h-8 text-primary" />
             </span>
-            <BlurText
-              text="Scan Your Website for Security Vulnerabilities"
-              delay={150}
-              animateBy="words"
-              direction="top"
-              className="text-2xl md:text-3xl font-extrabold text-white text-center mb-2"
-            />
-            <p className="text-gray-400 text-center text-base mb-2">
-              Enter your website URL and email to receive a comprehensive security report
+            <h2 className="text-2xl md:text-3xl font-extrabold text-white text-center mb-4">Check your email for audit</h2>
+            <p className="text-gray-300 text-center mb-4">
+              If you still do not get the audit report, email me at <a href="mailto:as1987137@gmail.com" className="underline text-primary">as1987137@gmail.com</a><br />
+              or reach me on LinkedIn: <a href="https://www.linkedin.com/in/abdul-sami-a48b78234/" target="_blank" rel="noopener noreferrer" className="underline text-primary">@abdul-sami-a48b78234</a>
             </p>
-          </div>
-          <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-            <div>
-              <label className="text-sm font-semibold flex items-center gap-2 mb-1" htmlFor="website">
-                <Globe className="w-4 h-4 text-primary" /> Website URL
-              </label>
-              <input
-                id="website"
-                type="url"
-                required
-                placeholder="https://your-website.com"
-                className="w-full px-4 py-3 rounded-lg bg-glass-light border border-glass-border text-white placeholder-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition"
-                value={website}
-                onChange={e => setWebsite(e.target.value)}
-                disabled={loading}
-              />
-            </div>
-            <div>
-              <label className="text-sm font-semibold flex items-center gap-2 mb-1" htmlFor="email">
-                <Mail className="w-4 h-4 text-primary" /> Email Address
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                placeholder="your-email@example.com"
-                className="w-full px-4 py-3 rounded-lg bg-glass-light border border-glass-border text-white placeholder-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                disabled={loading}
-              />
-            </div>
             <button
-              type="submit"
-              className="w-full py-3 mt-2 rounded-lg bg-primary text-white font-bold text-lg shadow-glow hover:bg-primary/80 transition disabled:opacity-60"
-              disabled={loading}
+              className="w-full py-3 mt-2 rounded-lg bg-primary text-white font-bold text-lg shadow-glow hover:bg-primary/80 transition"
+              onClick={() => { setSuccess(''); setWebsite(''); setEmail(''); }}
             >
-              {loading ? 'Scanning...' : 'Scan Website Security'}
+              Go Back
             </button>
-            {success && <div className="text-green-400 text-center text-sm mt-2">{success}</div>}
-            {error && <div className="text-red-400 text-center text-sm mt-2">{error}</div>}
-          </form>
-          <div className="text-gray-500 text-xs mt-6 flex items-center gap-2">
-            <span className="inline-block"><Lock className="w-4 h-4 inline-block mr-1 text-primary" /></span>
-            Your data is secure. We perform non-invasive testing and never store sensitive information.
           </div>
-        </div>
+        ) : (
+          <div className="max-w-md w-full mx-auto bg-glass border border-glass-border rounded-2xl shadow-glass p-8 flex flex-col items-center backdrop-blur-md">
+            <div className="flex flex-col items-center mb-6">
+              <span className="bg-primary/30 p-4 rounded-full mb-4 shadow-glow">
+                <Shield className="w-8 h-8 text-primary" />
+              </span>
+              <BlurText
+                text="Scan Your Website for Security Vulnerabilities"
+                delay={150}
+                animateBy="words"
+                direction="top"
+                className="text-2xl md:text-3xl font-extrabold text-white text-center mb-2"
+              />
+              <p className="text-gray-400 text-center text-base mb-2">
+                Enter your website URL and email to receive a comprehensive security report
+              </p>
+            </div>
+            <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
+              <div>
+                <label className="text-sm font-semibold flex items-center gap-2 mb-1" htmlFor="website">
+                  <Globe className="w-4 h-4 text-primary" /> Website URL
+                </label>
+                <input
+                  id="website"
+                  type="url"
+                  required
+                  placeholder="https://your-website.com"
+                  className="w-full px-4 py-3 rounded-lg bg-glass-light border border-glass-border text-white placeholder-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition"
+                  value={website}
+                  onChange={e => setWebsite(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+              <div>
+                <label className="text-sm font-semibold flex items-center gap-2 mb-1" htmlFor="email">
+                  <Mail className="w-4 h-4 text-primary" /> Email Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  placeholder="your-email@example.com"
+                  className="w-full px-4 py-3 rounded-lg bg-glass-light border border-glass-border text-white placeholder-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full py-3 mt-2 rounded-lg bg-primary text-white font-bold text-lg shadow-glow hover:bg-primary/80 transition disabled:opacity-60"
+                disabled={loading}
+              >
+                {loading ? 'Scanning...' : 'Scan Website Security'}
+              </button>
+              {success && <div className="text-green-400 text-center text-sm mt-2">{success}</div>}
+              {error && <div className="text-red-400 text-center text-sm mt-2">{error}</div>}
+            </form>
+            <div className="text-gray-500 text-xs mt-6 flex items-center gap-2">
+              <span className="inline-block"><Lock className="w-4 h-4 inline-block mr-1 text-primary" /></span>
+              Your data is secure. We perform non-invasive testing and never store sensitive information.
+            </div>
+          </div>
+        )}
         {/* Features Section */}
         <div className="max-w-5xl w-full mx-auto mt-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-primary text-center mb-2">Advanced Security Features</h2>
