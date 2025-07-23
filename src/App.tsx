@@ -2,8 +2,18 @@ import React, { useState } from 'react';
 import BlurText from './components/BlurText';
 import Squares from './components/Squares';
 import FeatureCard from './components/FeatureCard';
-import { Shield, Globe, Mail, Layers, FileText, Eye, Lock } from 'lucide-react';
+import { Shield, Globe, Mail, Layers, FileText, Eye, Lock, Linkedin } from 'lucide-react';
 import axios from 'axios';
+
+declare global {
+  interface ImportMeta {
+    env: {
+      VITE_WEBSCAN_BASE_URL: string;
+      VITE_WEBSCAN_USERNAME: string;
+      VITE_WEBSCAN_PASSWORD: string;
+    };
+  }
+}
 
 const features = [
   {
@@ -104,7 +114,23 @@ function App() {
   return (
     <div className="relative min-h-screen bg-[#181a20] text-white overflow-x-hidden">
       <Squares speed={0.5} squareSize={40} direction="diagonal" borderColor="#23263a" hoverFillColor="#222" />
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12">
+      {/* Header */}
+      <header className="fixed top-0 left-0 w-full z-20 flex items-center justify-between px-8 py-4 bg-glass border-b border-glass-border shadow-glass backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          
+          <span className="text-2xl font-extrabold text-primary tracking-tight">Hinterbuild</span>
+        </div>
+        <a
+          href="https://www.linkedin.com/in/abdul-sami-a48b78234/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-primary hover:text-white transition"
+        >
+          <Linkedin className="w-7 h-7" />
+          <span className="hidden md:inline font-semibold">LinkedIn</span>
+        </a>
+      </header>
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12 pt-32">
         <div className="max-w-md w-full mx-auto bg-glass border border-glass-border rounded-2xl shadow-glass p-8 flex flex-col items-center backdrop-blur-md">
           <div className="flex flex-col items-center mb-6">
             <span className="bg-primary/30 p-4 rounded-full mb-4 shadow-glow">
