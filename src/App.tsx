@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import BlurText from './components/BlurText';
 import Squares from './components/Squares';
 import FeatureCard from './components/FeatureCard';
-import { Shield, Globe, Mail, Layers, FileText, Eye, Lock, Linkedin } from 'lucide-react';
+import { Shield, Globe, Mail, Layers, FileText, Eye, Lock, Linkedin, Github } from 'lucide-react';
 import axios from 'axios';
 
 declare global {
@@ -117,18 +117,27 @@ function App() {
       {/* Header */}
       <header className="fixed top-0 left-0 w-full z-20 flex items-center justify-between px-8 py-4 bg-glass border-b border-glass-border shadow-glass backdrop-blur-md">
         <div className="flex items-center gap-3">
-          
-          <span className="text-2xl font-extrabold text-primary tracking-tight">Hinterbuild</span>
+         
+          <span className="text-2xl font-extrabold text-primary tracking-tight">WebScan By Hinterbuild </span>
         </div>
-        <a
-          href="https://www.linkedin.com/in/abdul-sami-a48b78234/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 text-primary hover:text-white transition"
-        >
-          <Linkedin className="w-7 h-7" />
-          <span className="hidden md:inline font-semibold">LinkedIn</span>
-        </a>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://github.com/AbdulSami455"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-primary hover:text-white transition"
+          >
+            <Github className="w-7 h-7" />
+          </a>
+          <a
+            href="https://www.linkedin.com/in/abdul-sami-a48b78234/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-primary hover:text-white transition"
+          >
+            <Linkedin className="w-7 h-7" />
+          </a>
+        </div>
       </header>
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12 pt-32">
         {success ? (
