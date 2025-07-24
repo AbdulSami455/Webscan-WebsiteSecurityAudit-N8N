@@ -4,6 +4,7 @@ import Squares from './components/Squares';
 import FeatureCard from './components/FeatureCard';
 import { Shield, Globe, Mail, Layers, FileText, Eye, Lock, Linkedin, Github } from 'lucide-react';
 import axios from 'axios';
+import { createClient } from '@supabase/supabase-js';
 
 declare global {
   interface ImportMeta {
@@ -11,6 +12,8 @@ declare global {
       VITE_WEBSCAN_BASE_URL: string;
       VITE_WEBSCAN_USERNAME: string;
       VITE_WEBSCAN_PASSWORD: string;
+      VITE_SUPABASE_URL: string;
+      VITE_SUPABASE_ANON_KEY: string;
     };
   }
 }
@@ -87,6 +90,11 @@ const API_URL = import.meta.env.VITE_WEBSCAN_BASE_URL;
 const API_USER = import.meta.env.VITE_WEBSCAN_USERNAME;
 const API_PASS = import.meta.env.VITE_WEBSCAN_PASSWORD;
 
+// Get Supabase credentials from environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 function App() {
   const [website, setWebsite] = useState('');
   const [email, setEmail] = useState('');
@@ -103,7 +111,15 @@ function App() {
       await axios.get(`${API_URL}?landing_page_url=${encodeURIComponent(website)}&email=${encodeURIComponent(email)}`, {
         auth: { username: API_USER, password: API_PASS },
       });
-      setSuccess('Audit requested! Check your email for the report.');
+      // Insert into Supabase users table
+      const { data, error } = await supabase
+        .from('users')
+        .insert([{ email, landingpage: website }]);
+      if (error) {
+        setError('Supabase error: ' + error.message);
+      } else {
+        setSuccess('Audit requested! Check your email for audit after 1 minute.');
+      }
     } catch (err: any) {
       setError('Failed to request audit. Please check your details and try again.');
     } finally {
@@ -145,7 +161,7 @@ function App() {
             <span className="bg-primary/30 p-4 rounded-full mb-4 shadow-glow">
               <Shield className="w-8 h-8 text-primary" />
             </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-white text-center mb-4">Check your email for audit</h2>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-white text-center mb-4">Check your email for audit After 1 Minute</h2>
             <p className="text-gray-300 text-center mb-4">
               If you still do not get the audit report, email me at <a href="mailto:as1987137@gmail.com" className="underline text-primary">as1987137@gmail.com</a><br />
               or reach me on LinkedIn: <a href="https://www.linkedin.com/in/abdul-sami-a48b78234/" target="_blank" rel="noopener noreferrer" className="underline text-primary">@abdul-sami-a48b78234</a>
