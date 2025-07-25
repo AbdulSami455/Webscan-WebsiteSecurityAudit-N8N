@@ -5,6 +5,7 @@ import FeatureCard from './components/FeatureCard';
 import { Shield, Globe, Mail, Layers, FileText, Eye, Lock, Linkedin, Github } from 'lucide-react';
 import axios from 'axios';
 import { createClient } from '@supabase/supabase-js';
+import validator from 'validator';
 
 declare global {
   interface ImportMeta {
@@ -101,20 +102,40 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; website?: string }>({});
+
+  const validate = () => {
+    const errors: { email?: string; website?: string } = {};
+    const trimmedEmail = email.trim();
+    const trimmedWebsite = website.trim();
+    if (!validator.isEmail(trimmedEmail)) {
+      errors.email = 'Invalid email address.';
+    } else if (trimmedEmail.length > 100) {
+      errors.email = 'Email is too long (max 100 characters).';
+    }
+    if (!validator.isURL(trimmedWebsite, { require_protocol: true })) {
+      errors.website = 'Invalid URL (must include http:// or https://).';
+    } else if (trimmedWebsite.length > 200) {
+      errors.website = 'URL is too long (max 200 characters).';
+    }
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setSuccess('');
     setError('');
+    if (!validate()) return;
+    setLoading(true);
     try {
-      await axios.get(`${API_URL}?landing_page_url=${encodeURIComponent(website)}&email=${encodeURIComponent(email)}`, {
+      await axios.get(`${API_URL}?landing_page_url=${encodeURIComponent(website.trim())}&email=${encodeURIComponent(email.trim())}`, {
         auth: { username: API_USER, password: API_PASS },
       });
       // Insert into Supabase users table
       const { data, error } = await supabase
         .from('users')
-        .insert([{ email, landingpage: website }]);
+        .insert([{ email: email.trim(), landingpage: website.trim() }]);
       if (error) {
         setError('Supabase error: ' + error.message);
       } else {
@@ -202,9 +223,13 @@ function App() {
                   placeholder="https://your-website.com"
                   className="w-full px-4 py-3 rounded-lg bg-glass-light border border-glass-border text-white placeholder-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition"
                   value={website}
-                  onChange={e => setWebsite(e.target.value)}
+                  onChange={e => {
+                    if (e.target.value.length <= 200) setWebsite(e.target.value);
+                  }}
                   disabled={loading}
+                  maxLength={200}
                 />
+                {fieldErrors.website && <div style={{ color: 'red', fontSize: '0.9em' }}>{fieldErrors.website}</div>}
               </div>
               <div>
                 <label className="text-sm font-semibold flex items-center gap-2 mb-1" htmlFor="email">
@@ -217,9 +242,13 @@ function App() {
                   placeholder="your-email@example.com"
                   className="w-full px-4 py-3 rounded-lg bg-glass-light border border-glass-border text-white placeholder-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/30 outline-none transition"
                   value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={e => {
+                    if (e.target.value.length <= 100) setEmail(e.target.value);
+                  }}
                   disabled={loading}
+                  maxLength={100}
                 />
+                {fieldErrors.email && <div style={{ color: 'red', fontSize: '0.9em' }}>{fieldErrors.email}</div>}
               </div>
               <button
                 type="submit"
