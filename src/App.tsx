@@ -10,11 +10,11 @@ import validator from 'validator';
 declare global {
   interface ImportMeta {
     env: {
-      VITE_WEBSCAN_BASE_URL: string;
-      VITE_WEBSCAN_USERNAME: string;
-      VITE_WEBSCAN_PASSWORD: string;
-      VITE_SUPABASE_URL: string;
-      VITE_SUPABASE_ANON_KEY: string;
+      // VITE_WEBSCAN_BASE_URL: string;
+      // VITE_WEBSCAN_USERNAME: string;
+      // VITE_WEBSCAN_PASSWORD: string;
+      // VITE_SUPABASE_URL: string;
+      // VITE_SUPABASE_ANON_KEY: string;
     };
   }
 }
@@ -87,9 +87,10 @@ const features = [
   },
 ];
 
-const API_URL = import.meta.env.VITE_WEBSCAN_BASE_URL;
-const API_USER = import.meta.env.VITE_WEBSCAN_USERNAME;
-const API_PASS = import.meta.env.VITE_WEBSCAN_PASSWORD;
+// Remove API key and credential variables
+// const API_URL = import.meta.env.VITE_WEBSCAN_BASE_URL;
+// const API_USER = import.meta.env.VITE_WEBSCAN_USERNAME;
+// const API_PASS = import.meta.env.VITE_WEBSCAN_PASSWORD;
 
 // Remove Supabase imports and variables
 // import { createClient } from '@supabase/supabase-js';
@@ -130,9 +131,8 @@ function App() {
     if (!validate()) return;
     setLoading(true);
     try {
-      await axios.get(`${API_URL}?landing_page_url=${encodeURIComponent(website.trim())}&email=${encodeURIComponent(email.trim())}`, {
-        auth: { username: API_USER, password: API_PASS },
-      });
+      // TODO: Call your secure backend API here. Do not send secrets from the frontend.
+      // Example: await axios.post('/api/audit', { website: website.trim(), email: email.trim() });
       setSuccess('Audit requested! Check your email for audit after 1 minute.');
     } catch (err: any) {
       setError('Failed to request audit. Please check your details and try again.');
