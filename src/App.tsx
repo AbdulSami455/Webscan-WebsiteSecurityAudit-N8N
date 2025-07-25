@@ -4,7 +4,7 @@ import Squares from './components/Squares';
 import FeatureCard from './components/FeatureCard';
 import { Shield, Globe, Mail, Layers, FileText, Eye, Lock, Linkedin, Github } from 'lucide-react';
 import axios from 'axios';
-import { createClient } from '@supabase/supabase-js';
+// import { createClient } from '@supabase/supabase-js';
 import validator from 'validator';
 
 declare global {
@@ -91,10 +91,11 @@ const API_URL = import.meta.env.VITE_WEBSCAN_BASE_URL;
 const API_USER = import.meta.env.VITE_WEBSCAN_USERNAME;
 const API_PASS = import.meta.env.VITE_WEBSCAN_PASSWORD;
 
-// Get Supabase credentials from environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Remove Supabase imports and variables
+// import { createClient } from '@supabase/supabase-js';
+// const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+// const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// const supabase = createClient(supabaseUrl, supabaseKey);
 
 function App() {
   const [website, setWebsite] = useState('');
@@ -132,15 +133,7 @@ function App() {
       await axios.get(`${API_URL}?landing_page_url=${encodeURIComponent(website.trim())}&email=${encodeURIComponent(email.trim())}`, {
         auth: { username: API_USER, password: API_PASS },
       });
-      // Insert into Supabase users table
-      const { data, error } = await supabase
-        .from('users')
-        .insert([{ email: email.trim(), landingpage: website.trim() }]);
-      if (error) {
-        setError('Supabase error: ' + error.message);
-      } else {
-        setSuccess('Audit requested! Check your email for audit after 1 minute.');
-      }
+      setSuccess('Audit requested! Check your email for audit after 1 minute.');
     } catch (err: any) {
       setError('Failed to request audit. Please check your details and try again.');
     } finally {
